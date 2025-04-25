@@ -40,7 +40,7 @@ export function ChatbotSection() {
         .order('created_at', { ascending: true })
         .limit(1);
       if (error) {
-        console.error('Error loading chat:', error);
+        console.warn('Unable to load saved chat:', error.message || error);
         return;
       }
       if (data?.length) {
@@ -64,10 +64,12 @@ export function ChatbotSection() {
       const assistantMessage: Message = { role: 'assistant', content: aiResponse };
       const updatedMessages = [...newMessages, assistantMessage];
       setMessages(updatedMessages);
-      saveChatConversation({
-        user_id: session?.user.id ?? 'anonymous',
-        messages: updatedMessages
-      }).catch(err => console.error('Error saving chat:', err));
+      if (session?.user.id) {
+        saveChatConversation({
+          user_id: session.user.id,
+          messages: updatedMessages
+        }).catch(err => console.error('Error saving chat:', err));
+      }
       setSuggestions(['More tips', 'Challenge ideas', 'Tracking progress']);
     } catch (err) {
       console.error('Error getting AI response:', err);

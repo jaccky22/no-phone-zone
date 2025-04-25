@@ -12,37 +12,20 @@ export function QuizSection() {
     setIsLoaded(true);
   }, []);
 
-  // Sample quiz questions
   const questions = [
-    {
-      question: "How often do you check your phone without a specific purpose?",
-      options: [
-        "Rarely - only when I need to use it",
-        "Occasionally - a few times a day",
-        "Frequently - every hour or so",
-        "Constantly - every few minutes"
-      ]
-    },
-    {
-      question: "Do you feel anxious when your phone is not within reach?",
-      options: [
-        "Not at all",
-        "Slightly anxious",
-        "Moderately anxious",
-        "Very anxious"
-      ]
-    },
-    {
-      question: "How often do you use your phone during meals?",
-      options: [
-        "Never",
-        "Rarely",
-        "Sometimes",
-        "Almost always"
-      ]
-    },
-    // We'll add more questions later
+    { question: "How often do you check your phone without a specific purpose?", options: ["Rarely - only when I need to use it", "Occasionally - a few times a day", "Frequently - every hour or so", "Constantly - every few minutes"] },
+    { question: "Do you feel anxious when your phone is not within reach?", options: ["Not at all", "Slightly anxious", "Moderately anxious", "Very anxious"] },
+    { question: "How often do you use your phone during meals?", options: ["Never", "Rarely", "Sometimes", "Almost always"] },
+    { question: "How much time do you spend on your phone daily?", options: ["Less than 1 hour", "1-3 hours", "3-5 hours", "More than 5 hours"] },
+    { question: "Do you check your phone first thing in the morning?", options: ["Never", "Sometimes", "Often", "Always"] },
+    { question: "Do you use your phone right before going to sleep?", options: ["Never", "Sometimes", "Often", "Always"] },
+    { question: "How often do you disable notifications to avoid distractions?", options: ["Never", "Rarely", "Sometimes", "Always"] },
+    { question: "Do you feel the need to constantly check social media?", options: ["Not at all", "A little", "Moderately", "Extremely"] },
+    { question: "How often do you find yourself using your phone while walking or commuting?", options: ["Never", "Rarely", "Sometimes", "Almost always"] },
+    { question: "Do you feel anxious when you haven't checked your phone for a few minutes?", options: ["Not at all", "Slightly anxious", "Moderately anxious", "Very anxious"] }
   ];
+
+  const completionPercentage = Math.round((answers.length / questions.length) * 100);
 
   const handleAnswer = (answerIndex: number) => {
     const newAnswers = [...answers];
@@ -57,13 +40,12 @@ export function QuizSection() {
   };
 
   const calculateScore = () => {
-    // Simple scoring: higher index = higher addiction score
     return answers.reduce((total, answer) => total + answer, 0);
   };
 
   const getResultMessage = () => {
     const score = calculateScore();
-    const maxScore = (questions.length - 1) * 3; // Maximum possible score
+    const maxScore = questions.length * 3; // Maximum possible score
     const percentage = (score / maxScore) * 100;
 
     if (percentage < 25) {
@@ -113,11 +95,12 @@ export function QuizSection() {
               <div className="mb-6">
                 <div className="flex justify-between text-sm text-muted-foreground mb-2">
                   <span>Question {currentStep + 1} of {questions.length}</span>
-                  <span>{Math.round(((currentStep + 1) / questions.length) * 100)}% Complete</span>
+                  <span>{completionPercentage}% Complete</span>
                 </div>
                 <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
                   <div 
-                    className={`h-full bg-primary transition-all duration-300 ease-in-out animate-progress ${currentStep === 0 ? 'progress-width-33' : currentStep === 1 ? 'progress-width-67' : 'progress-width-100'}`}
+                    className="h-full bg-primary transition-all duration-300 ease-in-out"
+                    style={{ width: `${completionPercentage}%` }}
                   ></div>
                 </div>
               </div>
@@ -149,7 +132,7 @@ export function QuizSection() {
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-spin-slow blur-sm"></div>
                 <div className="absolute inset-1 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center">
                   <div className="text-center">
-                    <span className="block text-5xl font-bold gradient-text">{Math.round((calculateScore() / ((questions.length - 1) * 3)) * 100)}%</span>
+                    <span className="block text-5xl font-bold gradient-text">{completionPercentage}%</span>
                     <span className="text-sm text-gray-500 dark:text-gray-400">Phone Dependency</span>
                   </div>
                 </div>

@@ -34,11 +34,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "No-Phone Zone Ideas | Break Free From Phone Addiction",
     description: "Join thousands in the No-Phone Challenge. Discover tools, tips, and a supportive community to help reduce screen time and reclaim your life.",
-    url: "https://your-domain.com",
+    url: "https://nophonezone.xyz",
     siteName: "No-Phone Zone Ideas",
     images: [
       {
-        url: "https://your-domain.com/og-image.jpg",
+        url: "https://nophonezone.xyz/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "No-Phone Zone Ideas Hero",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "No-Phone Zone Ideas | Break Free From Phone Addiction",
     description: "Join thousands in the No-Phone Challenge. Discover tools, tips, and a supportive community to help reduce screen time and reclaim your life.",
-    images: ["https://your-domain.com/og-image.jpg"],
+    images: ["https://nophonezone.xyz/og-image.jpg"],
     creator: "@your_twitter_handle",
   },
   robots: {
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://your-domain.com",
+    canonical: "https://nophonezone.xyz",
   },
 };
 

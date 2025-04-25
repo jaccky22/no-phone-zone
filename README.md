@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # No-Phone Zone Ideas 📱❌
 
 A one-page, interactive website designed to help users reduce their phone usage through engaging tools and features. The site combines AI-powered advice, interactive quizzes, and real-time challenge tracking to create a compelling user experience.
@@ -149,3 +150,6 @@ This project is monetized via Google AdSense. To configure:
 1. In `app/layout.tsx`, replace `YOUR_AD_SLOT` with your actual ad slot ID.
 2. Ensure `data-ad-client` matches your publisher ID `pub-5760370419762495`.
 3. Ads will display in the left and right sidebars with responsive Tailwind styling.
+=======
+# no-phone-zone
+>>>>>>> 4319929adcf7aa6becb84ae4374c1ba3c56b9b00

@@ -3,17 +3,39 @@
 import { useState, useEffect } from 'react';
 import { ChallengeTracker } from './challenge-tracker';
 import { ChallengeForm } from './challenge-form';
+import { useSupabase } from '@/context/supabase-provider';
 
 export function ChallengeSection() {
   const [showForm, setShowForm] = useState(false);
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [pendingTier, setPendingTier] = useState<string | null>(null);
+  const { session } = useSupabase();
   
   useEffect(() => {
     setIsLoaded(true);
   }, []);
 
+  useEffect(() => {
+    const storedTier = window.localStorage.getItem('pending_tier');
+    if (session && storedTier) {
+      setSelectedTier(storedTier);
+      setShowForm(true);
+      window.localStorage.removeItem('pending_tier');
+      setTimeout(() => {
+        const formElement = document.getElementById('challenge-form');
+        if (formElement) formElement.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  }, [session]);
+
   const handleStartChallenge = (tier: string) => {
+    if (!session) {
+      window.localStorage.setItem('pending_tier', tier.toLowerCase());
+      alert('Please log in to start the challenge.');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     setSelectedTier(tier.toLowerCase());
     setShowForm(true);
     

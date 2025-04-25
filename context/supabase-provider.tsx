@@ -35,7 +35,7 @@ export function SupabaseProvider({ children }: { children: ReactNode }) {
   const signIn = async (email: string) => {
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      options: { emailRedirectTo: `https://nophonezone.xyz/auth/callback` },
     });
     return { error };
   };

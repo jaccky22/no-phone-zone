@@ -31,7 +31,7 @@ export default function DashboardPage() {
 
     // Fetch challenges
     const { data: chData, error: chErr } = await supabase
-      .from<Challenge>('challenges')
+      .from('challenges')
       .select('*')
       .eq('user_id', session.user.id)
       .order('start_date', { ascending: false });
@@ -40,11 +40,18 @@ export default function DashboardPage() {
 
     // Fetch chat history
     const { data: convData, error: convErr } = await supabase
-      .from<Conversation>('chat_conversations')
+      .from('chat_conversations')
       .select('id, created_at, messages')
       .eq('user_id', session.user.id)
       .order('created_at', { ascending: false });
-    if (convErr) console.error('fetchConversations error:', convErr.message, convErr.details, convErr.hint);
+    if (convErr) {
+      // Supabase 42P01: relation/table not found
+      if ((convErr as any).code === '42P01') {
+        console.warn('Chat history unavailable: table does not exist');
+      } else {
+        console.warn('fetchConversations error:', convErr.message, convErr.details, convErr.hint);
+      }
+    }
     else setConversations(convData || []);
 
     // Fetch user badges
@@ -57,11 +64,25 @@ export default function DashboardPage() {
   useEffect(() => { fetchData(); }, [session]);
 
   const markCompleted = async (id: string) => {
+    // Find current streak and increment
+    const challenge = challenges.find(c => c.id === id);
+    const newStreak = (challenge?.streak ?? 0) + 1;
     const { error } = await supabase
       .from('challenges')
-      .update({ status: 'completed', end_date: new Date().toISOString() })
+      .update({ status: 'completed', end_date: new Date().toISOString(), streak: newStreak })
       .eq('id', id);
     if (error) console.error('markCompleted error:', error.message, error.details, error.hint);
+    else fetchData();
+  };
+
+  // Delete a challenge entry
+  const deleteChallenge = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this challenge result?')) return;
+    const { error } = await supabase
+      .from('challenges')
+      .delete()
+      .eq('id', id);
+    if (error) console.error('deleteChallenge error:', error.message, error.details);
     else fetchData();
   };
 
@@ -91,6 +112,10 @@ export default function DashboardPage() {
                     className="mt-2 px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600"
                   >Mark Completed</button>
                 )}
+                <button
+                  onClick={() => deleteChallenge(c.id)}
+                  className="mt-2 ml-2 px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                >Delete</button>
               </div>
             ))
           )}

@@ -14,9 +14,6 @@ export function Header() {
           <Link href="/#chatbot-section" className="text-sm font-medium hover:text-primary transition-colors">
             AI Advisor
           </Link>
-          <Link href="/#challenge-section" className="text-sm font-medium hover:text-primary transition-colors">
-            Join Challenge
-          </Link>
           <Link href="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
             My Dashboard
           </Link>

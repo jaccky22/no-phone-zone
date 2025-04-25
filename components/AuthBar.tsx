@@ -1,16 +1,35 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSupabase } from '@/context/supabase-provider';
 
 export function AuthBar() {
   const { session, signIn, signOut, isLoading } = useSupabase();
+  // Auto-send magic link for returning visitors
+  useEffect(() => {
+    const savedEmail = window.localStorage.getItem('user_email');
+    if (!session && savedEmail) {
+      setEmail(savedEmail);
+      signIn(savedEmail).then(({ error }) => {
+        if (error) setMessage(error.message || error.details || 'Error sending magic link.');
+        else setMessage('Check your email for the magic link.');
+      });
+    }
+  }, [session, signIn]);
+
+  // Pre-fill email input from previous visit
+  useEffect(() => {
+    const stored = window.localStorage.getItem('user_email');
+    if (stored) setEmail(stored);
+  }, []);
+
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState<string | null>(null);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
+    window.localStorage.setItem('user_email', email);
     const { error } = await signIn(email);
     if (error) {
       console.error('Magic link error:', error);
