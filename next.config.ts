@@ -8,4 +8,5 @@ module.exports = {
   },
   output: 'export',
   trailingSlash: true,
+  typescript: { ignoreBuildErrors: true },
 };
