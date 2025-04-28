@@ -6,4 +6,6 @@ module.exports = {
   images: {
     domains: ['otahvcdjxftgocdaowsn.supabase.co'],
   },
+  output: 'export',
+  trailingSlash: true,
 };
